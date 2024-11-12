@@ -1,0 +1,61 @@
+﻿@page "/participants/detail/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.Participant
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IParticipantService ParticipantService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Thông Tin Participant</MudText>
+
+        @if (Participant != null)
+        {
+            <MudGrid>
+                <MudItem xs="4">
+                    <strong>Tên:</strong>
+                </MudItem>
+                <MudItem xs="8">
+                    @Participant.Name
+                </MudItem>
+
+                <MudItem xs="4">
+                    <strong>Email:</strong>
+                </MudItem>
+                <MudItem xs="8">
+                    @Participant.Email
+                </MudItem>
+
+                <MudItem xs="4">
+                    <strong>Số Lần Tham Gia:</strong>
+                </MudItem>
+                <MudItem xs="8">
+                    @Participant.AdventureCount
+                </MudItem>
+            </MudGrid>
+
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
+                Quay Lại
+            </MudButton>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1">Đang tải dữ liệu...</MudText>
+        }
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private ParticipantVM Participant { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Participant = await ParticipantService.GetById(Id);
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/participant/list");
+    }
+}

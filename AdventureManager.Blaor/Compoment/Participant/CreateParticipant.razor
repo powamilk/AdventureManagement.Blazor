@@ -1,0 +1,36 @@
+﻿@page "/participants/create"
+@using AdventureManagement.BUS.ViewModel.Participant
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IParticipantService ParticipantService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Participant Mới</MudText>
+
+        <MudForm Model="NewParticipant" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tên" @bind-Value="NewParticipant.Name" Required="true" Immediate="true" />
+            <MudTextField Label="Email" @bind-Value="NewParticipant.Email" Required="true" Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private ParticipantCreateVM NewParticipant { get; set; } = new ParticipantCreateVM();
+    private MudForm form;
+
+    private async Task HandleValidSubmit()
+    {
+        await ParticipantService.Create(NewParticipant);
+        Navigation.NavigateTo("/participant/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/participant/list");
+    }
+}

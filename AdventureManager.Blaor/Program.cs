@@ -21,6 +21,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer("Server=powa;Database=AdventureManagement;Trusted_Connection=True;TrustServerCertificate=True"));
 builder.Services.AddTransient<IAdventureService, AdventureService>();
 builder.Services.AddTransient<IGuideService, GuideService>();
+builder.Services.AddTransient<IOrganismService, OrganismService>();
+builder.Services.AddTransient<IParticipantService, ParticipantService>();
 builder.Services.AddAutoMapper(typeof(Mapping));
 builder.Services.AddMudServices();
 

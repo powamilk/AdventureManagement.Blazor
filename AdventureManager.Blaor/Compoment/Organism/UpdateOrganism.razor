@@ -1,0 +1,53 @@
+﻿@page "/organisms/update/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.OrganismViewModel
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IOrganismService OrganismService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Cập Nhật Organism</MudText>
+
+        <MudForm Model="OrganismToUpdate" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tên" @bind-Value="OrganismToUpdate.Name" Required="true" Immediate="true" />
+            <MudTextField Label="Mô tả" @bind-Value="OrganismToUpdate.Description" Required="true" Immediate="true" />
+            <MudTextField Label="Môi trường sống" @bind-Value="OrganismToUpdate.Habitat" Required="true" Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private UpdateOrganismVM OrganismToUpdate { get; set; } = new UpdateOrganismVM();
+    private MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var organism = await OrganismService.GetOrganismByIdAsync(Id);
+        if (organism != null)
+        {
+            OrganismToUpdate = new UpdateOrganismVM
+            {
+                Id = organism.Id,
+                Name = organism.Name,
+                Description = organism.Description,
+                Habitat = organism.Habitat
+            };
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await OrganismService.UpdateOrganismAsync(Id, OrganismToUpdate);
+        Navigation.NavigateTo("/organism/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/organism/list");
+    }
+}

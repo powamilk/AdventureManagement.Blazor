@@ -1,0 +1,37 @@
+﻿@page "/organisms/create"
+@using AdventureManagement.BUS.ViewModel.OrganismViewModel
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IOrganismService OrganismService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Organism Mới</MudText>
+
+        <MudForm Model="NewOrganism" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tên" @bind-Value="NewOrganism.Name" Required="true" Immediate="true" />
+            <MudTextField Label="Mô tả" @bind-Value="NewOrganism.Description" Required="true" Immediate="true" />
+            <MudTextField Label="Môi trường sống" @bind-Value="NewOrganism.Habitat" Required="true" Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private CreateOrganismVM NewOrganism { get; set; } = new CreateOrganismVM();
+    private MudForm form;
+
+    private async Task HandleValidSubmit()
+    {
+        await OrganismService.CreateOrganismAsync(NewOrganism);
+        Navigation.NavigateTo("/organism/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/organism/list");
+    }
+}
