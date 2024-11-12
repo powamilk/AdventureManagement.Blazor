@@ -1,0 +1,20 @@
+﻿@page "/adventure/list"
+@using AdventureManagement.BUS.Services;
+@using AdventureManagement.BUS.ViewModel;
+@using AdventureManagement.BUS.ViewModel.AdventureViewModel
+@using MudBlazor
+
+@inject IAdventureService AdventureService
+
+<h3>AdventureList</h3>
+
+
+
+@code {
+    private List<AdventureVM> adventures = new List<AdventureVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        adventures = await AdventureService.GetAllAsync();
+    }
+}
