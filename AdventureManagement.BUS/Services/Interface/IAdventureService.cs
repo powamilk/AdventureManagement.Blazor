@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdventureManagement.BUS.Services
+namespace AdventureManagement.BUS.Services.Interface
 {
     public interface IAdventureService
     {

@@ -1,0 +1,55 @@
+﻿@page "/adventures/create"
+@using AdventureManagement.BUS.ViewModel.AdventureViewModel
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IAdventureService AdventureService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Adventure Mới</MudText>
+
+        <MudForm Model="NewAdventure" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tiêu đề" @bind-Value="NewAdventure.Title" Required="true" Immediate="true" />
+            <MudTextField Label="Mô tả" @bind-Value="NewAdventure.Description" Required="true" Immediate="true" />
+            <MudTextField Label="Địa điểm" @bind-Value="NewAdventure.Location" Required="true" Immediate="true" />
+            <MudNumericField Label="Thời lượng (giờ)" @bind-Value="NewAdventure.Duration" Required="true" Immediate="true" />
+
+            <MudNumericField Label="Guide ID" @bind-Value="NewAdventure.GuideId" Required="true" Immediate="true" />
+
+            <MudTextField Label="Danh sách Organism IDs (phân tách bằng dấu phẩy)" 
+                          @bind-Value="OrganismIdsInput" 
+                          Required="true" 
+                          Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private CreateAdventureVM NewAdventure { get; set; } = new CreateAdventureVM();
+    private MudForm form;
+    private string OrganismIdsInput { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!string.IsNullOrWhiteSpace(OrganismIdsInput))
+        {
+            NewAdventure.OrganismIds = OrganismIdsInput.Split(',')
+                .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .ToList();
+        }
+
+        await AdventureService.CreateAsync(NewAdventure);
+        Navigation.NavigateTo("/adventure/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/adventure/list");
+    }
+}

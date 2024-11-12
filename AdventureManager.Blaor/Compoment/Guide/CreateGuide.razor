@@ -1,0 +1,37 @@
+﻿@page "/guides/create"
+@using AdventureManagement.BUS.ViewModel.GuideViewModel
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IGuideService GuideService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Guide Mới</MudText>
+
+        <MudForm Model="NewGuide" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tên" @bind-Value="NewGuide.Name" Required="true" Immediate="true" />
+            <MudTextField Label="Chuyên môn" @bind-Value="NewGuide.Expertise" Required="true" Immediate="true" />
+            <MudNumericField Label="Kinh nghiệm (năm)" @bind-Value="NewGuide.ExperienceYears" Required="true" Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private CreateGuideVM NewGuide { get; set; } = new CreateGuideVM();
+    private MudForm form;
+
+    private async Task HandleValidSubmit()
+    {
+        await GuideService.CreateGuideAsync(NewGuide);
+        Navigation.NavigateTo("/guide/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/guide/list");
+    }
+}

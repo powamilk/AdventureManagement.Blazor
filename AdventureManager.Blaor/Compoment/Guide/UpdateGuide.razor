@@ -1,0 +1,53 @@
+﻿@page "/guides/update/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.GuideViewModel
+@using AdventureManagement.BUS.Services.Interface
+@using MudBlazor
+@inject IGuideService GuideService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
+    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
+        <MudText Typo="Typo.h6" GutterBottom="true">Cập Nhật Guide</MudText>
+
+        <MudForm Model="GuideToUpdate" @ref="form" OnValidSubmit="HandleValidSubmit">
+            <MudTextField Label="Tên" @bind-Value="GuideToUpdate.Name" Required="true" Immediate="true" />
+            <MudTextField Label="Chuyên môn" @bind-Value="GuideToUpdate.Expertise" Required="true" Immediate="true" />
+            <MudNumericField Label="Kinh nghiệm (năm)" @bind-Value="GuideToUpdate.ExperienceYears" Required="true" Immediate="true" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
+            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
+        </MudForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private UpdateGuideVM GuideToUpdate { get; set; } = new UpdateGuideVM();
+    private MudForm form;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var guide = await GuideService.GetGuideByIdAsync(Id);
+        if (guide != null)
+        {
+            GuideToUpdate = new UpdateGuideVM
+            {
+                Id = guide.Id,
+                Name = guide.Name,
+                Expertise = guide.Expertise,
+                ExperienceYears = guide.ExperienceYears
+            };
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await GuideService.UpdateGuideAsync(Id, GuideToUpdate);
+        Navigation.NavigateTo("/guide/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/guide/list");
+    }
+}

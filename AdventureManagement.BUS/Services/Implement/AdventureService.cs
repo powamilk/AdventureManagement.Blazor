@@ -12,8 +12,9 @@ using AdventureManagement.DAL.Repository;
 using AdventureManagement.DAL.Entities;
 using AdventureManagement.BUS.ViewModel.OrganismViewModel;
 using AdventureManagement.BUS.ViewModel.GuideViewModel;
+using AdventureManagement.BUS.Services.Interface;
 
-namespace AdventureManagement.BUS.Services
+namespace AdventureManagement.BUS.Services.Implement
 {
     public class AdventureService : IAdventureService
     {
@@ -24,7 +25,7 @@ namespace AdventureManagement.BUS.Services
         {
             _context = new();
             _mapper = mapper;
-        }   
+        }
 
         public async Task CreateAsync(CreateAdventureVM vm)
         {
@@ -51,12 +52,12 @@ namespace AdventureManagement.BUS.Services
 
         public async Task DeleteAsync(int id)
         {
-           var response = await _context.Adventures.FindAsync(id);  
+            var response = await _context.Adventures.FindAsync(id);
             if (response != null)
             {
                 _context.Adventures.Remove(response);
                 await _context.SaveChangesAsync();
-            }    
+            }
         }
 
         public async Task<List<AdventureVM>> GetAllAsync()
@@ -69,10 +70,10 @@ namespace AdventureManagement.BUS.Services
         {
             var response = await _context.Adventures.Include(a => a.Guide).Include(a => a.ParticipantInteractions).Include(a => a.AdventureOrganisms)
                .ThenInclude(a => a.Organism).FirstOrDefaultAsync(a => a.Id == id);
-            
+
             if (response == null) return null;
 
-            return _mapper.Map<AdventureVM>(response);  
+            return _mapper.Map<AdventureVM>(response);
         }
         public async Task<List<OrganismVM>> GetAllOrganismsAsync()
         {
@@ -81,11 +82,11 @@ namespace AdventureManagement.BUS.Services
         }
 
 
-        public async Task UpdateAsync(int id,   UpdateAdventureVM vm)
+        public async Task UpdateAsync(int id, UpdateAdventureVM vm)
         {
             var response = await _context.Adventures.Include(a => a.AdventureOrganisms).FirstOrDefaultAsync(a => a.Id == id);
 
-            if(response == null) return;
+            if (response == null) return;
 
             response.Title = vm.Title;
             response.Description = vm.Description;

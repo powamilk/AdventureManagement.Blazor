@@ -1,5 +1,6 @@
 using AdventureManagement.BUS.Mapper;
-using AdventureManagement.BUS.Services;
+using AdventureManagement.BUS.Services.Implement;
+using AdventureManagement.BUS.Services.Interface;
 using AdventureManagement.DAL;
 using AdventureManagement.PL;
 using Microsoft.AspNetCore.Components.Web;

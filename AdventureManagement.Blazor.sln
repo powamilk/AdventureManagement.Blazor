@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureManagement.BUS", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureManagement.PL", "AdventureManagement.PL\AdventureManagement.PL.csproj", "{62AFAC23-CFF2-4118-A286-47EE33B11305}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventureManager.Blaor", "AdventureManager.Blaor\AdventureManager.Blaor.csproj", "{46897459-7B7C-461D-8BBD-8C40DB21AF30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{62AFAC23-CFF2-4118-A286-47EE33B11305}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62AFAC23-CFF2-4118-A286-47EE33B11305}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62AFAC23-CFF2-4118-A286-47EE33B11305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46897459-7B7C-461D-8BBD-8C40DB21AF30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46897459-7B7C-461D-8BBD-8C40DB21AF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46897459-7B7C-461D-8BBD-8C40DB21AF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46897459-7B7C-461D-8BBD-8C40DB21AF30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

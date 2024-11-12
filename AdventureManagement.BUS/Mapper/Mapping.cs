@@ -1,4 +1,6 @@
 ﻿using AdventureManagement.BUS.ViewModel.AdventureViewModel;
+using AdventureManagement.BUS.ViewModel.GuideViewModel;
+using AdventureManagement.BUS.ViewModel.OrganismViewModel;
 using AdventureManagement.DAL.Entities;
 using AutoMapper;
 using System;
@@ -16,6 +18,10 @@ namespace AdventureManagement.BUS.Mapper
             CreateMap<CreateAdventureVM, Adventure>().ReverseMap();
             CreateMap<UpdateAdventureVM, Adventure>().ReverseMap();
             CreateMap<AdventureVM, Adventure>().ReverseMap();
+            CreateMap<Guide, GuideVM>();
+
+            // Mapping cho Organism và OrganismVM
+            CreateMap<Organism, OrganismVM>();
         }
     }
 }
