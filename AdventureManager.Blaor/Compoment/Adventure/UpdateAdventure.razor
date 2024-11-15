@@ -1,0 +1,101 @@
+﻿@page "/adventures/update/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.AdventureViewModel
+@using AdventureManagement.BUS.Services.Interface
+@inject IAdventureService AdventureService
+@inject NavigationManager Navigation
+
+<h3>Cập Nhật Adventure</h3>
+
+<EditForm Model="AdventureToUpdate" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Tiêu đề</label>
+        <InputText id="title" class="form-control" @bind-Value="AdventureToUpdate.Title" required />
+        <ValidationMessage For="() => AdventureToUpdate.Title" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Mô tả</label>
+        <InputText id="description" class="form-control" @bind-Value="AdventureToUpdate.Description" required />
+        <ValidationMessage For="() => AdventureToUpdate.Description" />
+    </div>
+
+    <div class="form-group">
+        <label for="location">Địa điểm</label>
+        <InputText id="location" class="form-control" @bind-Value="AdventureToUpdate.Location" required />
+        <ValidationMessage For="() => AdventureToUpdate.Location" />
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Thời lượng (giờ)</label>
+        <InputNumber id="duration" class="form-control" @bind-Value="AdventureToUpdate.Duration" required />
+        <ValidationMessage For="() => AdventureToUpdate.Duration" />
+    </div>
+
+    <div class="form-group">
+        <label for="guideId">Guide ID</label>
+        <InputNumber id="guideId" class="form-control" @bind-Value="AdventureToUpdate.GuideId" required />
+        <ValidationMessage For="() => AdventureToUpdate.GuideId" />
+    </div>
+
+    <div class="form-group">
+        <label for="organismIdsInput">Danh sách Organism IDs (phân tách bằng dấu phẩy)</label>
+        <InputText id="organismIdsInput" class="form-control" @bind-Value="OrganismIdsInput" required />
+        <ValidationMessage For="() => OrganismIdsInput" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private UpdateAdventureVM AdventureToUpdate { get; set; } = new UpdateAdventureVM();
+    private string OrganismIdsInput { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var adventure = await AdventureService.GetByIdAsync(Id);
+        if (adventure != null)
+        {
+            AdventureToUpdate = new UpdateAdventureVM
+                {
+                    Id = adventure.Id,
+                    Title = adventure.Title,
+                    Description = adventure.Description,
+                    Location = adventure.Location,
+                    Duration = adventure.Duration,
+                    GuideId = adventure.Guide.Id,
+                    OrganismIds = adventure.Organisms.Select(o => o.Id).ToList()
+                };
+
+            OrganismIdsInput = string.Join(",", AdventureToUpdate.OrganismIds);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (!string.IsNullOrWhiteSpace(OrganismIdsInput))
+        {
+            AdventureToUpdate.OrganismIds = OrganismIdsInput.Split(',')
+                .Select(id => int.TryParse(id.Trim(), out var parsedId) ? parsedId : (int?)null)
+                .Where(id => id.HasValue)
+                .Select(id => id.Value)
+                .ToList();
+        }
+
+        await AdventureService.UpdateAsync(Id, AdventureToUpdate);
+        Navigation.NavigateTo("/adventure/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/adventure/list");
+    }
+}

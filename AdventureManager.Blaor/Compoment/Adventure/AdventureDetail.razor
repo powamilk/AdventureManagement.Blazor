@@ -1,0 +1,92 @@
+﻿@page "/adventures/detail/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.AdventureViewModel
+@using AdventureManagement.BUS.Services.Interface
+@inject IAdventureService AdventureService
+@inject NavigationManager Navigation
+
+<h3>Thông Tin Adventure</h3>
+
+@if (Adventure != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-4"><strong>Tiêu đề:</strong></div>
+            <div class="col-8">@Adventure.Title</div>
+        </div>
+
+        <div class="row">
+            <div class="col-4"><strong>Mô tả:</strong></div>
+            <div class="col-8">@Adventure.Description</div>
+        </div>
+
+        <div class="row">
+            <div class="col-4"><strong>Địa điểm:</strong></div>
+            <div class="col-8">@Adventure.Location</div>
+        </div>
+
+        <div class="row">
+            <div class="col-4"><strong>Thời lượng (giờ):</strong></div>
+            <div class="col-8">@Adventure.Duration</div>
+        </div>
+
+        <div class="row">
+            <div class="col-4"><strong>Guide ID:</strong></div>
+            <div class="col-8">@Adventure.Guide?.Id</div>
+        </div>
+
+        <div class="row">
+            <div class="col-4"><strong>Danh sách Organisms:</strong></div>
+            <div class="col-8">
+                @if (Adventure.Organisms != null && Adventure.Organisms.Any())
+                {
+                    <ul>
+                        @foreach (var organism in Adventure.Organisms)
+                        {
+                            <li>@organism.Name</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span>Không có Organisms nào</span>
+                }
+            </div>
+        </div>
+
+        <button class="btn btn-secondary mt-4" @onclick="GoBack">
+            <i class="material-icons">arrow_back</i> Quay Lại
+        </button>
+    </div>
+}
+else
+{
+    <p>Đang tải dữ liệu...</p>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private AdventureVM Adventure { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Adventure = await AdventureService.GetByIdAsync(Id);
+        if (Adventure != null)
+        {
+            Console.WriteLine($"Title: {Adventure.Title}");
+            Console.WriteLine($"Description: {Adventure.Description}");
+            Console.WriteLine($"Location: {Adventure.Location}");
+            Console.WriteLine($"Duration: {Adventure.Duration}");
+            Console.WriteLine($"Guide ID: {Adventure.Guide?.Id}");
+            Console.WriteLine($"Organisms: {string.Join(", ", Adventure.Organisms.Select(o => o.Name))}");
+        }
+        else
+        {
+            Console.WriteLine("Adventure is null");
+        }
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/adventure/list");
+    }
+}

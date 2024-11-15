@@ -1,49 +1,39 @@
 ﻿@page "/guides/detail/{Id:int}"
 @using AdventureManagement.BUS.ViewModel.GuideViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IGuideService GuideService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Thông Tin Guide</MudText>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5>Thông Tin Guide</h5>
+        </div>
+        <div class="card-body">
+            @if (Guide != null)
+            {
+                <dl class="row">
+                    <dt class="col-sm-3">Tên:</dt>
+                    <dd class="col-sm-9">@Guide.Name</dd>
 
-        @if (Guide != null)
-        {
-            <MudGrid>
-                <MudItem xs="4">
-                    <strong>Tên:</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Guide.Name
-                </MudItem>
+                    <dt class="col-sm-3">Chuyên môn:</dt>
+                    <dd class="col-sm-9">@Guide.Expertise</dd>
 
-                <MudItem xs="4">
-                    <strong>Chuyên môn:</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Guide.Expertise
-                </MudItem>
+                    <dt class="col-sm-3">Kinh nghiệm (năm):</dt>
+                    <dd class="col-sm-9">@Guide.ExperienceYears</dd>
+                </dl>
 
-                <MudItem xs="4">
-                    <strong>Kinh nghiệm (năm):</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Guide.ExperienceYears
-                </MudItem>
-            </MudGrid>
-
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
-                Quay Lại
-            </MudButton>
-        }
-        else
-        {
-            <MudText Typo="Typo.body1">Đang tải dữ liệu...</MudText>
-        }
-    </MudPaper>
-</MudContainer>
+                <button class="btn btn-secondary" @onclick="GoBack">
+                    <i class="bi bi-arrow-left"></i> Quay Lại
+                </button>
+            }
+            else
+            {
+                <p>Đang tải dữ liệu...</p>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter] public int Id { get; set; }

@@ -1,53 +1,65 @@
 ﻿@page "/adventure/list"
 @using AdventureManagement.BUS.ViewModel.AdventureViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
-
 @inject IAdventureService AdventureService
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
 <h3>Adventure List</h3>
 
-<MudPaper Class="py-6">
-    <MudIconButton Icon="@Icons.Material.Filled.AddCircle" Title="Add Adventure" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" @onclick="AddAdventure" />
-    <MudTable Items="@adventures" Hover="true" Dense="true" Bordered="true" Striped="true">
-        <HeaderContent>
-            <MudTh>Title</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>Location</MudTh>
-            <MudTh>Duration (hours)</MudTh>
-            <MudTh>Guide ID</MudTh>
-            <MudTh>Organism IDs</MudTh>
-            <MudTh>Actions</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Title">@context.Title</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
-            <MudTd DataLabel="Location">@context.Location</MudTd>
-            <MudTd DataLabel="Duration">@context.Duration</MudTd>
-            <MudTd DataLabel="Guide ID">@context.Guide?.Id</MudTd>
-            <MudTd DataLabel="Organism IDs">
-                @if (context.Organisms != null && context.Organisms.Any())
-                {
-                    @foreach (var organism in context.Organisms)
+<button class="btn btn-primary" @onclick="AddAdventure">
+    <i class="material-icons">add_circle</i> Add Adventure
+</button>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Duration (hours)</th>
+            <th>Guide ID</th>
+            <th>Organism IDs</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var adventure in adventures)
+        {
+            <tr>
+                <td>@adventure.Title</td>
+                <td>@adventure.Description</td>
+                <td>@adventure.Location</td>
+                <td>@adventure.Duration</td>
+                <td>@adventure.Guide?.Id</td>
+                <td>
+                    @if (adventure.Organisms != null && adventure.Organisms.Any())
                     {
-                        <MudChip T="string" Color="Color.Primary" Size="Size.Small">@organism.Id</MudChip>
+                        @foreach (var organism in adventure.Organisms)
+                        {
+                            <span class="badge badge-primary">@organism.Id</span>
+                        }
                     }
-                }
-                else
-                {
-                    <MudText>-</MudText>
-                }
-            </MudTd>
-            <MudTd DataLabel="Actions">
-                <MudIconButton Icon="@Icons.Material.Filled.Info" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" @onclick="() => ViewDetail(context.Id)" />
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" @onclick="() => EditAdventure(context.Id)" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small" @onclick="() => DeleteAdventure(context.Id)" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-</MudPaper>
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-info btn-sm" @onclick="() => ViewDetail(adventure.Id)">
+                        <i class="material-icons">info</i> View
+                    </button>
+                    <button class="btn btn-secondary btn-sm" @onclick="() => EditAdventure(adventure.Id)">
+                        <i class="material-icons">edit</i> Edit
+                    </button>
+                    <button class="btn btn-danger btn-sm" @onclick="() => DeleteAdventure(adventure.Id)">
+                        <i class="material-icons">delete</i> Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
     private List<AdventureVM> adventures = new List<AdventureVM>();

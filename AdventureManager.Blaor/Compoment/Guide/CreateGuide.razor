@@ -1,28 +1,39 @@
 ﻿@page "/guides/create"
 @using AdventureManagement.BUS.ViewModel.GuideViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IGuideService GuideService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Guide Mới</MudText>
+<h3>Thêm Guide Mới</h3>
 
-        <MudForm Model="NewGuide" @ref="form" OnValidSubmit="HandleValidSubmit">
-            <MudTextField Label="Tên" @bind-Value="NewGuide.Name" Required="true" Immediate="true" />
-            <MudTextField Label="Chuyên môn" @bind-Value="NewGuide.Expertise" Required="true" Immediate="true" />
-            <MudNumericField Label="Kinh nghiệm (năm)" @bind-Value="NewGuide.ExperienceYears" Required="true" Immediate="true" />
+<EditForm Model="NewGuide" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
-        </MudForm>
-    </MudPaper>
-</MudContainer>
+    <div class="form-group">
+        <label for="Name">Tên:</label>
+        <InputText id="Name" class="form-control" @bind-Value="NewGuide.Name" />
+        <ValidationMessage For="@(() => NewGuide.Name)" />
+    </div>
+
+    <div class="form-group">
+        <label for="Expertise">Chuyên môn:</label>
+        <InputText id="Expertise" class="form-control" @bind-Value="NewGuide.Expertise" />
+        <ValidationMessage For="@(() => NewGuide.Expertise)" />
+    </div>
+
+    <div class="form-group">
+        <label for="ExperienceYears">Kinh nghiệm (năm):</label>
+        <InputNumber id="ExperienceYears" class="form-control" @bind-Value="NewGuide.ExperienceYears" />
+        <ValidationMessage For="@(() => NewGuide.ExperienceYears)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+</EditForm>
 
 @code {
     private CreateGuideVM NewGuide { get; set; } = new CreateGuideVM();
-    private MudForm form;
 
     private async Task HandleValidSubmit()
     {

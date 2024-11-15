@@ -1,49 +1,34 @@
 ﻿@page "/participants/detail/{Id:int}"
 @using AdventureManagement.BUS.ViewModel.Participant
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IParticipantService ParticipantService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Thông Tin Participant</MudText>
+<div class="container mt-4">
+    <h3>Thông Tin Participant</h3>
 
-        @if (Participant != null)
-        {
-            <MudGrid>
-                <MudItem xs="4">
-                    <strong>Tên:</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Participant.Name
-                </MudItem>
+    @if (Participant != null)
+    {
+        <dl class="row">
+            <dt class="col-sm-3">Tên</dt>
+            <dd class="col-sm-9">@Participant.Name</dd>
 
-                <MudItem xs="4">
-                    <strong>Email:</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Participant.Email
-                </MudItem>
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Participant.Email</dd>
 
-                <MudItem xs="4">
-                    <strong>Số Lần Tham Gia:</strong>
-                </MudItem>
-                <MudItem xs="8">
-                    @Participant.AdventureCount
-                </MudItem>
-            </MudGrid>
+            <dt class="col-sm-3">Số Lần Tham Gia</dt>
+            <dd class="col-sm-9">@Participant.AdventureCount</dd>
+        </dl>
 
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
-                Quay Lại
-            </MudButton>
-        }
-        else
-        {
-            <MudText Typo="Typo.body1">Đang tải dữ liệu...</MudText>
-        }
-    </MudPaper>
-</MudContainer>
+        <button class="btn btn-secondary" @onclick="GoBack">
+            <i class="bi bi-arrow-left-circle"></i> Quay Lại
+        </button>
+    }
+    else
+    {
+        <p>Đang tải dữ liệu...</p>
+    }
+</div>
 
 @code {
     [Parameter] public int Id { get; set; }

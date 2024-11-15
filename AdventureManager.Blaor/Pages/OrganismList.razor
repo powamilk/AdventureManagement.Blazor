@@ -1,34 +1,49 @@
 ﻿@page "/organism/list"
 @using AdventureManagement.BUS.ViewModel.OrganismViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IOrganismService OrganismService
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 
-<h3>Danh sách Organism</h3>
+<div class="container mt-4">
+    <h3>Danh sách Organism</h3>
 
-<MudPaper Class="py-6">
-    <MudIconButton Icon="@Icons.Material.Filled.AddCircle" Title="Thêm Organism" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" @onclick="AddOrganism" />
-    <MudTable Items="@organisms" Hover="true" Dense="true" Bordered="true" Striped="true">
-        <HeaderContent>
-            <MudTh>Tên</MudTh>
-            <MudTh>Mô tả</MudTh>
-            <MudTh>Môi trường sống</MudTh>
-            <MudTh>Thao Tác</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Tên">@context.Name</MudTd>
-            <MudTd DataLabel="Mô tả">@context.Description</MudTd>
-            <MudTd DataLabel="Môi trường sống">@context.Habitat</MudTd>
-            <MudTd DataLabel="Thao Tác">
-                <MudIconButton Icon="@Icons.Material.Filled.Info" Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" @onclick="() => ViewDetail(context.Id)" />
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small" @onclick="() => EditOrganism(context.Id)" />
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" Variant="Variant.Outlined" Color="Color.Error" Size="Size.Small" @onclick="() => DeleteOrganism(context.Id)" />
-            </MudTd>
-        </RowTemplate>
-    </MudTable>
-</MudPaper>
+    <button class="btn btn-primary mb-3" @onclick="AddOrganism">
+        <i class="bi bi-plus-circle"></i> Thêm Organism
+    </button>
+
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Mô tả</th>
+                <th>Môi trường sống</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var organism in organisms)
+            {
+                <tr>
+                    <td>@organism.Name</td>
+                    <td>@organism.Description</td>
+                    <td>@organism.Habitat</td>
+                    <td>
+                        <button class="btn btn-info btn-sm" @onclick="() => ViewDetail(organism.Id)">
+                            <i class="bi bi-info-circle"></i> Xem
+                        </button>
+                        <button class="btn btn-secondary btn-sm" @onclick="() => EditOrganism(organism.Id)">
+                            <i class="bi bi-pencil-square"></i> Sửa
+                        </button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteOrganism(organism.Id)">
+                            <i class="bi bi-trash"></i> Xóa
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @code {
     private List<OrganismVM> organisms = new List<OrganismVM>();

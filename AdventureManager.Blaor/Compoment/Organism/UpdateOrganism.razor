@@ -1,29 +1,39 @@
 ﻿@page "/organisms/update/{Id:int}"
 @using AdventureManagement.BUS.ViewModel.OrganismViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IOrganismService OrganismService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Cập Nhật Organism</MudText>
+<div class="container mt-4">
+    <h3>Cập Nhật Organism</h3>
 
-        <MudForm Model="OrganismToUpdate" @ref="form" OnValidSubmit="HandleValidSubmit">
-            <MudTextField Label="Tên" @bind-Value="OrganismToUpdate.Name" Required="true" Immediate="true" />
-            <MudTextField Label="Mô tả" @bind-Value="OrganismToUpdate.Description" Required="true" Immediate="true" />
-            <MudTextField Label="Môi trường sống" @bind-Value="OrganismToUpdate.Habitat" Required="true" Immediate="true" />
+    <EditForm Model="OrganismToUpdate" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
-        </MudForm>
-    </MudPaper>
-</MudContainer>
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên</label>
+            <InputText id="name" class="form-control" @bind-Value="OrganismToUpdate.Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Mô tả</label>
+            <InputText id="description" class="form-control" @bind-Value="OrganismToUpdate.Description" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="habitat" class="form-label">Môi trường sống</label>
+            <InputText id="habitat" class="form-control" @bind-Value="OrganismToUpdate.Habitat" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+    </EditForm>
+</div>
 
 @code {
     [Parameter] public int Id { get; set; }
     private UpdateOrganismVM OrganismToUpdate { get; set; } = new UpdateOrganismVM();
-    private MudForm form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,12 +41,12 @@
         if (organism != null)
         {
             OrganismToUpdate = new UpdateOrganismVM
-            {
-                Id = organism.Id,
-                Name = organism.Name,
-                Description = organism.Description,
-                Habitat = organism.Habitat
-            };
+                {
+                    Id = organism.Id,
+                    Name = organism.Name,
+                    Description = organism.Description,
+                    Habitat = organism.Habitat
+                };
         }
     }
 

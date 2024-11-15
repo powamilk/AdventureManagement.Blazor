@@ -1,28 +1,36 @@
 ﻿@page "/participants/update/{Id:int}"
 @using AdventureManagement.BUS.ViewModel.Participant
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IParticipantService ParticipantService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Cập Nhật Participant</MudText>
+<div class="container mt-4">
+    <h3>Cập Nhật Participant</h3>
 
-        <MudForm Model="ParticipantToUpdate" @ref="form" OnValidSubmit="HandleValidSubmit">
-            <MudTextField Label="Tên" @bind-Value="ParticipantToUpdate.Name" Required="true" Immediate="true" />
-            <MudTextField Label="Email" @bind-Value="ParticipantToUpdate.Email" Required="true" Immediate="true" />
+    <EditForm Model="ParticipantToUpdate" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
-        </MudForm>
-    </MudPaper>
-</MudContainer>
+        <div class="mb-3">
+            <label for="Name" class="form-label">Tên</label>
+            <InputText id="Name" class="form-control" @bind-Value="ParticipantToUpdate.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email</label>
+            <InputText id="Email" class="form-control" @bind-Value="ParticipantToUpdate.Email" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
     [Parameter] public int Id { get; set; }
     private ParticipantUpdateVM ParticipantToUpdate { get; set; } = new ParticipantUpdateVM();
-    private MudForm form;
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,11 +38,11 @@
         if (participant != null)
         {
             ParticipantToUpdate = new ParticipantUpdateVM
-            {
-                Id = participant.Id,
-                Name = participant.Name,
-                Email = participant.Email
-            };
+                {
+                    Id = participant.Id,
+                    Name = participant.Name,
+                    Email = participant.Email
+                };
         }
     }
 

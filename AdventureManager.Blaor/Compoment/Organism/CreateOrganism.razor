@@ -1,28 +1,40 @@
 ﻿@page "/organisms/create"
 @using AdventureManagement.BUS.ViewModel.OrganismViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IOrganismService OrganismService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Thêm Organism Mới</MudText>
+<div class="container mt-4">
+    <h3>Thêm Organism Mới</h3>
 
-        <MudForm Model="NewOrganism" @ref="form" OnValidSubmit="HandleValidSubmit">
-            <MudTextField Label="Tên" @bind-Value="NewOrganism.Name" Required="true" Immediate="true" />
-            <MudTextField Label="Mô tả" @bind-Value="NewOrganism.Description" Required="true" Immediate="true" />
-            <MudTextField Label="Môi trường sống" @bind-Value="NewOrganism.Habitat" Required="true" Immediate="true" />
+    <EditForm Model="NewOrganism" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
 
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
-        </MudForm>
-    </MudPaper>
-</MudContainer>
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên</label>
+            <InputText id="name" class="form-control" @bind-Value="NewOrganism.Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Mô tả</label>
+            <InputText id="description" class="form-control" @bind-Value="NewOrganism.Description" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="habitat" class="form-label">Môi trường sống</label>
+            <InputText id="habitat" class="form-control" @bind-Value="NewOrganism.Habitat" required />
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+        </div>
+    </EditForm>
+</div>
 
 @code {
     private CreateOrganismVM NewOrganism { get; set; } = new CreateOrganismVM();
-    private MudForm form;
 
     private async Task HandleValidSubmit()
     {

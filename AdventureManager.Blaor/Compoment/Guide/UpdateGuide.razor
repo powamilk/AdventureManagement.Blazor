@@ -1,29 +1,51 @@
 ﻿@page "/guides/update/{Id:int}"
 @using AdventureManagement.BUS.ViewModel.GuideViewModel
 @using AdventureManagement.BUS.Services.Interface
-@using MudBlazor
 @inject IGuideService GuideService
 @inject NavigationManager Navigation
 
-<MudContainer MaxWidth="MaxWidth.Small" Class="d-flex justify-center">
-    <MudPaper Class="p-4 m-4" Elevation="1" Style="width: 100%;">
-        <MudText Typo="Typo.h6" GutterBottom="true">Cập Nhật Guide</MudText>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5>Cập Nhật Guide</h5>
+        </div>
+        <div class="card-body">
+            @if (GuideToUpdate != null)
+            {
+                <EditForm Model="GuideToUpdate" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
 
-        <MudForm Model="GuideToUpdate" @ref="form" OnValidSubmit="HandleValidSubmit">
-            <MudTextField Label="Tên" @bind-Value="GuideToUpdate.Name" Required="true" Immediate="true" />
-            <MudTextField Label="Chuyên môn" @bind-Value="GuideToUpdate.Expertise" Required="true" Immediate="true" />
-            <MudNumericField Label="Kinh nghiệm (năm)" @bind-Value="GuideToUpdate.ExperienceYears" Required="true" Immediate="true" />
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên</label>
+                        <InputText id="name" class="form-control" @bind-Value="GuideToUpdate.Name" required />
+                    </div>
 
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" Type="Submit">Lưu</MudButton>
-            <MudButton Color="Color.Secondary" Variant="Variant.Outlined" OnClick="GoBack">Hủy</MudButton>
-        </MudForm>
-    </MudPaper>
-</MudContainer>
+                    <div class="mb-3">
+                        <label for="expertise" class="form-label">Chuyên môn</label>
+                        <InputText id="expertise" class="form-control" @bind-Value="GuideToUpdate.Expertise" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="experienceYears" class="form-label">Kinh nghiệm (năm)</label>
+                        <InputNumber id="experienceYears" class="form-control" @bind-Value="GuideToUpdate.ExperienceYears" required />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+                </EditForm>
+            }
+            else
+            {
+                <p>Đang tải dữ liệu...</p>
+            }
+        </div>
+    </div>
+</div>
 
 @code {
     [Parameter] public int Id { get; set; }
-    private UpdateGuideVM GuideToUpdate { get; set; } = new UpdateGuideVM();
-    private MudForm form;
+    private UpdateGuideVM GuideToUpdate { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,12 +53,12 @@
         if (guide != null)
         {
             GuideToUpdate = new UpdateGuideVM
-            {
-                Id = guide.Id,
-                Name = guide.Name,
-                Expertise = guide.Expertise,
-                ExperienceYears = guide.ExperienceYears
-            };
+                {
+                    Id = guide.Id,
+                    Name = guide.Name,
+                    Expertise = guide.Expertise,
+                    ExperienceYears = guide.ExperienceYears
+                };
         }
     }
 
