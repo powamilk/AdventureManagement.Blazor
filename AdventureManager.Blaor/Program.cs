@@ -23,8 +23,9 @@ builder.Services.AddTransient<IAdventureService, AdventureService>();
 builder.Services.AddTransient<IGuideService, GuideService>();
 builder.Services.AddTransient<IOrganismService, OrganismService>();
 builder.Services.AddTransient<IParticipantService, ParticipantService>();
+builder.Services.AddTransient<IParticipantInteractionService, ParticipantInteractionService>();
 builder.Services.AddAutoMapper(typeof(Mapping));
-builder.Services.AddMudServices();
+//builder.Services.AddMudServices();
 
 var app = builder.Build();
 

@@ -1,29 +1,46 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="main-layout">
+<div class="main-layout" style="font-family: 'Arial', sans-serif;">
     <!-- App Bar -->
-    <header class="app-bar">
-        <button class="menu-button" @onclick="ToggleDrawer">&#9776;</button>
-        <span class="app-title">AdventureManager.Blazor</span>
+    <header class="app-bar d-flex justify-content-between align-items-center p-3 bg-primary text-white">
+        <button class="menu-button btn btn-light" @onclick="ToggleDrawer">&#9776;</button>
+        <span class="app-title h4">AdventureManager.Blazor</span>
     </header>
 
     <!-- Drawer (Sidebar) -->
-    <div class="drawer" style="display: @(isDrawerOpen ? "block" : "none")">
+    <div class="drawer" style="display: @(isDrawerOpen ? "block" : "none"); position: fixed; top: 0; left: 0; width: 250px; height: 100%; background-color: #343a40; color: white; transition: 0.3s; padding-top: 20px;">
         <nav class="nav">
-            <ul>
-                <li><NavLink href="/" class="nav-link">Home</NavLink></li>
-                <li><NavLink href="/counter" class="nav-link">Counter</NavLink></li>
-                <li><NavLink href="/fetchdata" class="nav-link">Fetch Data</NavLink></li>
-                <li><NavLink href="/adventure/list" class="nav-link">Adventure</NavLink></li>
-                <li><NavLink href="/guide/list" class="nav-link">Guide</NavLink></li>
-                <li><NavLink href="/organism/list" class="nav-link">Organism</NavLink></li>
-                <li><NavLink href="/participant/list" class="nav-link">Participant</NavLink></li>
+            <ul class="list-unstyled">
+                <li class="nav-item">
+                    <NavLink href="/" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Home</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/counter" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Counter</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/fetchdata" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Fetch Data</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/adventure/list" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Adventure</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/guide/list" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Guide</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/organism/list" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Organism</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/participant/list" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Participant</NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/participantinteraction/list" class="nav-link text-white p-2" style="font-size: 16px; text-decoration: none;">Participant Interaction</NavLink>
+                </li>
             </ul>
         </nav>
     </div>
 
     <!-- Main Content -->
-    <main class="main-content">
+    <main class="main-content" style="margin-left: @(isDrawerOpen ? "250px" : "0"); padding: 20px;">
         @Body
     </main>
 </div>

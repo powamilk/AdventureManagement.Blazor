@@ -1,0 +1,37 @@
+﻿@page "/participantinteraction/detail/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.ParticipantInteraction
+@using AdventureManagement.BUS.Services.Interface
+@inject IParticipantInteractionService ParticipantInteractionService
+@inject NavigationManager Navigation
+
+<h3>Thông Tin Participant Interaction</h3>
+
+@if (ParticipantInteraction != null)
+{
+    <div><strong>Adventure:</strong> @ParticipantInteraction.AdventureTitle</div>
+    <div><strong>Participant:</strong> @ParticipantInteraction.ParticipantName</div>
+    <div><strong>Rating:</strong> @ParticipantInteraction.Rating</div>
+    <div><strong>Comment:</strong> @ParticipantInteraction.Comment</div>
+    <div><strong>Created At:</strong> @ParticipantInteraction.CreatedAt</div>
+
+    <button class="btn btn-secondary mt-3" @onclick="GoBack">Quay Lại</button>
+}
+else
+{
+    <p>Đang tải dữ liệu...</p>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private ParticipantInteractionVM ParticipantInteraction { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ParticipantInteraction = await ParticipantInteractionService.GetParticipantInteractionByIdAsync(Id);
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/participantinteraction/list");
+    }
+}

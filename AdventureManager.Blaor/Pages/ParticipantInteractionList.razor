@@ -1,0 +1,72 @@
+﻿@page "/participantinteraction/list"
+@using AdventureManagement.BUS.ViewModel.ParticipantInteraction
+@using AdventureManagement.BUS.Services.Interface
+@inject IParticipantInteractionService ParticipantInteractionService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<h3>Danh sách Participant Interactions</h3>
+
+<button class="btn btn-primary mb-3" @onclick="AddParticipantInteraction">Thêm Participant Interaction</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Adventure</th>
+            <th>Participant</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var interaction in participantInteractions)
+        {
+            <tr>
+                <td>@interaction.AdventureTitle</td>
+                <td>@interaction.ParticipantName</td>
+                <td>@interaction.Rating</td>
+                <td>@interaction.Comment</td>
+                <td>
+                    <button class="btn btn-info btn-sm" @onclick="() => ViewDetail(interaction.Id)">View</button>
+                    <button class="btn btn-secondary btn-sm" @onclick="() => EditParticipantInteraction(interaction.Id)">Edit</button>
+                    <button class="btn btn-danger btn-sm" @onclick="() => DeleteParticipantInteraction(interaction.Id)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<ParticipantInteractionVM> participantInteractions = new List<ParticipantInteractionVM>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        participantInteractions = await ParticipantInteractionService.GetAllParticipantInteractionsAsync();
+    }
+
+    private void AddParticipantInteraction()
+    {
+        Navigation.NavigateTo("/participantinteraction/create");
+    }
+
+    private void ViewDetail(int id)
+    {
+        Navigation.NavigateTo($"/participantinteraction/detail/{id}");
+    }
+
+    private void EditParticipantInteraction(int id)
+    {
+        Navigation.NavigateTo($"/participantinteraction/update/{id}");
+    }
+
+    private async Task DeleteParticipantInteraction(int id)
+    {
+        var confirmed = await JS.InvokeAsync<bool>("confirm", "Bạn có chắc muốn xóa Participant Interaction này?");
+        if (confirmed)
+        {
+            await ParticipantInteractionService.DeleteParticipantInteractionAsync(id);
+            participantInteractions = await ParticipantInteractionService.GetAllParticipantInteractionsAsync();
+        }
+    }
+}

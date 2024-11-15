@@ -62,3 +62,77 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+
+/* app.css */
+
+/* Layout chung cho MainLayout */
+.main-layout {
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* App Bar */
+.app-bar {
+    background-color: #00796b;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Sidebar Drawer */
+.drawer {
+    background-color: #004d40;
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+    .drawer nav {
+        margin-top: 20px;
+    }
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+}
+
+    .nav-link:hover {
+        background-color: #00796b;
+    }
+
+/* Main Content */
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+    .drawer {
+        transform: translateX(-250px);
+    }
+
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+

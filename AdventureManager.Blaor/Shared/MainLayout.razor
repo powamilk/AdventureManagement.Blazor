@@ -1,29 +1,31 @@
-﻿@using MudBlazor
-@inherits LayoutComponentBase
-<MudDialogProvider />
-<MudSnackbarProvider />
+﻿@inherits LayoutComponentBase
 
-<MudLayout>
-    <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        My Application
-    </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
+<div class="main-layout" style="font-family: Arial, sans-serif;">
+
+    <!-- App Bar -->
+    <header class="app-bar" style="position: fixed; top: 0; left: 0; width: 100%; background-color: #007bff; color: white; padding: 10px; z-index: 1;">
+        <button class="menu-button btn btn-light" @onclick="ToggleDrawer" style="margin-right: 10px;">&#9776;</button>
+        <span class="app-title h5">AdventureManager.Blazor</span>
+    </header>
+
+    <!-- Sidebar (NavMenu) -->
+    <div class="sidebar" style="position: fixed; top: 50px; left: 0; width: 250px; height: calc(100% - 50px); background-color: #343a40; color: white; display: @(isDrawerOpen ? "block" : "none"); transition: 0.3s;">
         <NavMenu />
-    </MudDrawer>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
-@code {
-    bool _drawerOpen = true;
+    </div>
 
-    void DrawerToggle()
+    <!-- Main Content Area -->
+    <div class="content-area" style="margin-top: 50px; margin-left: @(isDrawerOpen ? "250px" : "0"); padding: 20px; transition: margin-left 0.3s;">
+        <main class="main-content">
+            @Body
+        </main>
+    </div>
+</div>
+
+@code {
+    private bool isDrawerOpen = true;
+
+    private void ToggleDrawer()
     {
-        _drawerOpen = !_drawerOpen;
+        isDrawerOpen = !isDrawerOpen;
     }
 }
-
-@* Required *@
-<MudThemeProvider />
-<MudPopoverProvider />

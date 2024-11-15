@@ -10,46 +10,39 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-        <label for="title">Tiêu đề</label>
-        <InputText id="title" class="form-control" @bind-Value="NewAdventure.Title" required />
-        <ValidationMessage For="() => NewAdventure.Title" />
+    <div>
+        <label>Tiêu đề:</label>
+        <InputText @bind-Value="NewAdventure.Title" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label for="description">Mô tả</label>
-        <InputText id="description" class="form-control" @bind-Value="NewAdventure.Description" required />
-        <ValidationMessage For="() => NewAdventure.Description" />
+    <div>
+        <label>Mô tả:</label>
+        <InputTextArea @bind-Value="NewAdventure.Description" class="form-control" />
+        <ValidationMessage For="@(() => NewAdventure.Description)" />
     </div>
 
-    <div class="form-group">
-        <label for="location">Địa điểm</label>
-        <InputText id="location" class="form-control" @bind-Value="NewAdventure.Location" required />
-        <ValidationMessage For="() => NewAdventure.Location" />
+    <div>
+        <label>Địa điểm:</label>
+        <InputText @bind-Value="NewAdventure.Location" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label for="duration">Thời lượng (giờ)</label>
-        <InputNumber id="duration" class="form-control" @bind-Value="NewAdventure.Duration" required />
-        <ValidationMessage For="() => NewAdventure.Duration" />
+    <div>
+        <label>Thời lượng (giờ):</label>
+        <InputNumber @bind-Value="NewAdventure.Duration" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label for="guideId">Guide ID</label>
-        <InputNumber id="guideId" class="form-control" @bind-Value="NewAdventure.GuideId" required />
-        <ValidationMessage For="() => NewAdventure.GuideId" />
+    <div>
+        <label>Guide ID:</label>
+        <InputNumber @bind-Value="NewAdventure.GuideId" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label for="organismIdsInput">Danh sách Organism IDs (phân tách bằng dấu phẩy)</label>
-        <InputText id="organismIdsInput" class="form-control" @bind-Value="OrganismIdsInput" required />
-        <ValidationMessage For="() => OrganismIdsInput" />
+    <div>
+        <label>Danh sách Organism IDs (phân tách bằng dấu phẩy):</label>
+        <InputText @bind-Value="OrganismIdsInput" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Lưu</button>
-        <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
 </EditForm>
 
 @code {
@@ -61,7 +54,7 @@
         if (!string.IsNullOrWhiteSpace(OrganismIdsInput))
         {
             NewAdventure.OrganismIds = OrganismIdsInput.Split(',')
-                .Select(id => int.TryParse(id.Trim(), out var parsedId) ? parsedId : (int?)null)
+                .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
                 .Where(id => id.HasValue)
                 .Select(id => id.Value)
                 .ToList();

@@ -1,0 +1,55 @@
+﻿@page "/participantinteraction/update/{Id:int}"
+@using AdventureManagement.BUS.ViewModel.ParticipantInteraction
+@using AdventureManagement.BUS.Services.Interface
+@inject IParticipantInteractionService ParticipantInteractionService
+@inject NavigationManager Navigation
+
+<h3>Cập Nhật Participant Interaction</h3>
+
+<EditForm Model="ParticipantInteractionToUpdate" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Rating:</label>
+        <InputNumber @bind-Value="ParticipantInteractionToUpdate.Rating" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Comment:</label>
+        <InputTextArea @bind-Value="ParticipantInteractionToUpdate.Comment" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <button type="button" class="btn btn-secondary" @onclick="GoBack">Hủy</button>
+</EditForm>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private UpdateParticipantInteractionVM ParticipantInteractionToUpdate { get; set; } = new UpdateParticipantInteractionVM();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var interaction = await ParticipantInteractionService.GetParticipantInteractionByIdAsync(Id);
+        if (interaction != null)
+        {
+            ParticipantInteractionToUpdate = new UpdateParticipantInteractionVM
+                {
+                    Id = interaction.Id,
+                    Rating = interaction.Rating,
+                    Comment = interaction.Comment
+                };
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await ParticipantInteractionService.UpdateParticipantInteractionAsync(Id, ParticipantInteractionToUpdate);
+        Navigation.NavigateTo("/participantinteraction/list");
+    }
+
+    private void GoBack()
+    {
+        Navigation.NavigateTo("/participantinteraction/list");
+    }
+}
